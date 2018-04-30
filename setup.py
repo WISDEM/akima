@@ -3,7 +3,9 @@
 
 from setuptools import setup
 from numpy.distutils.core import setup, Extension
+import os
 
+extra_compile_args = ['-O3']
 
 setup(
     name='akima',
@@ -13,5 +15,5 @@ setup(
     package_dir={'': 'src'},
     py_modules=['akima'],
     license='Apache License, Version 2.0',
-    ext_modules=[Extension('_akima', ['src/akima.f90'], extra_compile_args=['-O2'])]
+    ext_modules=[Extension('_akima', ['src/akima.f90'], extra_f90_compile_args=extra_compile_args, language='f90')]
 )
