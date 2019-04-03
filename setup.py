@@ -8,7 +8,7 @@ setup(
     name='akima',
     version='1.0.0',
     description='Akima spline interpolation (and derivatives)',
-    author='S. Andrew Ning',
+    author='NREL WISDEM Team',
     package_dir={'': 'src'},
     py_modules=['akima'],
     license='Apache License, Version 2.0',
