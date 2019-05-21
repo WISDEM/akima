@@ -8,16 +8,19 @@ Created by Andrew Ning on 2013-12-17.
 
 import numpy as np
 from akima import Akima, akima_interp
+from scipy.interpolate import Akima1DInterpolator
 
 # setup spline based on fixed points
 xpt = np.array([1.0, 2.0, 4.0, 6.0, 10.0, 12.0])
 ypt = np.array([5.0, 12.0, 14.0, 16.0, 21.0, 29.0])
 spline = Akima(xpt, ypt)
+spline2 = Akima1DInterpolator(xpt, ypt)
 
 # interpolate  (extrapolation will work, but beware the results may be silly)
 n = 50
 x = np.linspace(0.0, 13.0, n)
 y, dydx, dydxpt, dydypt = spline.interp(x)
+y2 = spline2(x)
 
 # an alternative way to call akima if you don't care about derivatives
 # (and also don't care about evaluating the spline multiple times)
@@ -48,7 +51,8 @@ fd3 = (ystep - y)/h
 
 import matplotlib.pyplot as plt
 plt.plot(xpt, ypt, 'o')
-plt.plot(x, y, '-')
+plt.plot(x, y, x, y2)
+plt.legend(('Control Points','In-House','SciPy'))
 
 plt.figure()
 plt.plot(x, dydx)
