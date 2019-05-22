@@ -14,22 +14,14 @@ def akima_interp(xpt, ypt, x):
     """convenience method for those who don't want derivatives
     and don't want to evaluate the same spline multiple times"""
 
-    p0, p1, p2, p3 = _akima.setup(xpt, ypt, delta_x=0.0)
-
-    npt = len(xpt)
-    zeros = np.zeros((npt-1, npt))
-
-    y, dydx, dydxpt, dydypt = _akima.interp(x, xpt, p0, p1, p2, p3,
-        zeros, zeros, zeros, zeros, zeros, zeros, zeros, zeros)
-
+    a = Akima(xpt, ypt, delta_x=0.0)
+    y, _ = a.interp(x)
     return y
 
 
 
 def akima_interp_with_derivs(xpt, ypt, x, delta_x=0.1):
-
     a = Akima(xpt, ypt, delta_x)
-
     return a.interp(x)
 
 
@@ -57,26 +49,7 @@ class Akima(object):
 
         """
 
-        xpt = np.array(xpt)
-        ypt = np.array(ypt)
-
-        self.xpt = xpt
-        self.delta_x = delta_x
-
-        n = len(xpt)
-        xptd = np.vstack([np.eye(n), np.zeros((n, n))])
-        yptd = np.vstack([np.zeros((n, n)), np.eye(n)])
-
-        self.p0, p0d, self.p1, p1d, self.p2, p2d, self.p3, p3d = \
-            _akima.setup_dv(xpt, xptd, ypt, yptd, delta_x=delta_x)
-        self.dp0_dxpt = p0d[:n, :].T
-        self.dp0_dypt = p0d[n:, :].T
-        self.dp1_dxpt = p1d[:n, :].T
-        self.dp1_dypt = p1d[n:, :].T
-        self.dp2_dxpt = p2d[:n, :].T
-        self.dp2_dypt = p2d[n:, :].T
-        self.dp3_dxpt = p3d[:n, :].T
-        self.dp3_dypt = p3d[n:, :].T
+        self.akimaObj = _akima.Akima(np.array(xpt), np.array(ypt), float(delta_x))
 
 
 
@@ -118,10 +91,7 @@ class Akima(object):
             dydxpt = np.array([])
             dydypt = np.array([])
         else:
-            y, dydx, dydxpt, dydypt = _akima.interp(x,
-                self.xpt, self.p0, self.p1, self.p2, self.p3,
-                self.dp0_dxpt, self.dp1_dxpt, self.dp2_dxpt, self.dp3_dxpt,
-                self.dp0_dypt, self.dp1_dypt, self.dp2_dypt, self.dp3_dypt)
+            y, dydx, dydxpt, dydypt = self.akimaObj.interp(x)
 
         if isFloat:
             y = y[0]
