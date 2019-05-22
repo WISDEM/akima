@@ -48,8 +48,11 @@ class Akima(object):
             you don't need dydxpt, dydypt)
 
         """
-
-        self.akimaObj = _akima.Akima(np.array(xpt), np.array(ypt), float(delta_x))
+        xpt = np.array(xpt)
+        ypt = np.array(ypt)
+        self.nctrl = len(xpt)
+        self.delta_x = delta_x
+        self.akimaObj = _akima.Akima(xpt, ypt, float(delta_x))
 
 
 
@@ -77,7 +80,7 @@ class Akima(object):
         """
 
         x = np.asarray(x)
-
+        npt = len(x)
         try:
             len(x)
             isFloat = False
@@ -92,7 +95,9 @@ class Akima(object):
             dydypt = np.array([])
         else:
             y, dydx, dydxpt, dydypt = self.akimaObj.interp(x)
-
+            dydxpt = dydxpt.reshape((npt, self.nctrl))
+            dydypt = dydypt.reshape((npt, self.nctrl))
+            
         if isFloat:
             y = y[0]
             dydx = dydx[0]

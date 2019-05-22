@@ -41,16 +41,12 @@ xptstep[idx] += h
 spline = Akima(xptstep, ypt)
 ystep, _, _, _ = spline.interp(x)
 fd2 = (ystep - y)/h
-print(dydxpt[:, idx])
-print(fd2)
 
 yptstep = np.copy(ypt)
 yptstep[idx] += h
 spline = Akima(xpt, yptstep)
 ystep, _, _, _ = spline.interp(x)
 fd3 = (ystep - y)/h
-print(dydypt[:, idx])
-print(fd3)
 
 import matplotlib.pyplot as plt
 plt.plot(xpt, ypt, 'o')
