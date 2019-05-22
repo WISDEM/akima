@@ -18,7 +18,7 @@ spline2 = Akima1DInterpolator(xpt, ypt)
 
 # interpolate  (extrapolation will work, but beware the results may be silly)
 n = 50
-x = np.linspace(0.0, 13.0, n)
+x = np.linspace(1.001, 11.999, n)
 y, dydx, dydxpt, dydypt = spline.interp(x)
 y2 = spline2(x)
 
@@ -26,7 +26,7 @@ y2 = spline2(x)
 # (and also don't care about evaluating the spline multiple times)
 # a slight amount of smoothing is used for the one with derivatives so
 # y will not exactly match y2 unless you set delta_x=0.0 in the Akima constructor
-y2 = akima_interp(xpt, ypt, x)
+y3 = akima_interp(xpt, ypt, x)
 
 # compare derivatives w.r.t. x to finite differencing
 h = 1e-6
@@ -50,8 +50,8 @@ fd3 = (ystep - y)/h
 
 import matplotlib.pyplot as plt
 plt.plot(xpt, ypt, 'o')
-plt.plot(x, y, x, y2, '--')
-plt.legend(('Control Points','In-House','SciPy'))
+plt.plot(x, y, x, y2, '--', x, y3, '-.')
+plt.legend(('Control Points','In-House','SciPy','dx=0'))
 
 plt.figure()
 plt.plot(x, dydx)
