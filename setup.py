@@ -3,6 +3,9 @@
 
 from setuptools import setup
 from numpy.distutils.core import setup, Extension
+import os
+
+os.environ['NPY_DISTUTILS_APPEND_FLAGS'] = '1'
 
 setup(
     name='akima',
@@ -12,5 +15,5 @@ setup(
     package_dir={'': 'src'},
     py_modules=['akima'],
     license='Apache License, Version 2.0',
-    ext_modules=[Extension('_akima', ['src/akima.f90'], extra_f90_compile_args=['-O3','-fPIC','-shared'], extra_link_args=['-shared'])]
+    ext_modules=[Extension('_akima', ['src/akima.f90'], extra_compile_args=['-O3','-fPIC'])]
 )
