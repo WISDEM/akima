@@ -81,6 +81,8 @@ class Akima(object):
 
 
 
+    def __call__(self, x):
+        return self.interp(x)
 
     def interp(self, x):
         """interpolate at new values
